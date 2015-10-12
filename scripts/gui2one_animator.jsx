@@ -16,10 +16,20 @@
 
 function createUI(thisObj) {
     var myPanel = thisObj;
-
-    addKeysBtn =  myPanel.add("button",[10,10,100,30] ,"Add Keys");
-    myPanel.add("button",[10,50,100,70] ,"btn2");
-
+    
+    var group = myPanel.add("group",[0,20,200,200],"myGroup");
+    addKeysBtn =  group.add("button",[10,0,100,30] ,"Add Keys");
+    //myPanel.add("button",[10,50,100,70] ,"btn2");
+    var slider = group.add("slider", [10,50,100,70], 50,0,100);
+    var label = group.add("StaticText",[10,80,100,100], "hello");
+    var prog = group.add("ProgressBar",undefined,50);
+    
+     $.writeln(label);
+    slider.onChanging = function(){
+            $.writeln(this.value);
+            label.text = this.value;
+    }
+    
     addKeysBtn.onClick = function(){
         var layer = app.project.activeItem.selectedLayers[0]
         var posProp = layer.property("Position");
