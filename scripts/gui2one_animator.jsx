@@ -50,6 +50,70 @@ function alignLayers(){
 }
 
 
+function ease2keys(){
+
+    for (obj in app.project.activeItem.selectedLayers ){
+            var layer = app.project.activeItem.selectedLayers[obj];
+
+            var easeIn = new KeyframeEase(0.0,100.0);
+            var easeOut = new KeyframeEase(0.75, 85);
+             
+            for (item in layer.selectedProperties){
+
+                prop = layer.selectedProperties[item];
+                $.writeln(prop.name);
+                $.writeln(prop.propertyValueType + "<::::::::::::::::");
+                $.writeln(prop.selectedKeys.length);
+
+                
+
+                for( var i=0; i < prop.selectedKeys.length; i++){
+                        $.writeln(prop.keyTime(prop.selectedKeys[i]) + "<--------");
+                        if(i == 0) { prop.setTemporalEaseAtKey(prop.selectedKeys[i],[easeIn] ,[easeOut]); }
+                        if(i == 1) { prop.setTemporalEaseAtKey(prop.selectedKeys[i],[easeOut] ,[easeIn]); }
+                        
+                        
+                }
+                $.writeln("------------------------------------");     
+            }
+            
+    }
+}
+
+function ease2keysBack(){
+
+    $.writeln(" ease2keysBack()------------------------------------");   
+    for (obj in app.project.activeItem.selectedLayers ){
+            var layer = app.project.activeItem.selectedLayers[obj];
+
+            var easeIn = new KeyframeEase(0.0,100.0);
+            var easeOut = new KeyframeEase(0.75, 85);
+             
+            for (item in layer.selectedProperties){
+
+                prop = layer.selectedProperties[item];
+                $.writeln(prop.name);
+                $.writeln(prop.propertyValueType + "<::::::::::::::::");
+                $.writeln(prop.selectedKeys.length);
+
+                
+
+                for( var i=0; i < prop.selectedKeys.length; i++){
+                        $.writeln(prop.keyTime(prop.selectedKeys[i]) + "<--------");
+                        if(i == 0) { prop.setTemporalEaseAtKey(prop.selectedKeys[i],[easeIn] ,[easeOut]); }
+                        if(i == 1) { prop.setTemporalEaseAtKey(prop.selectedKeys[i],[new KeyframeEase(0.0,30.0)] ,[easeIn]); }
+                        
+                        
+                }
+
+                var k1 = prop.addKey(prop.keyTime(prop.selectedKeys[1]) - 0.1);
+                prop.setTemporalContinuousAtKey(k1, true);
+                $.writeln(" ADDED KEY------------------------------------");     
+            }
+            
+    }
+}
+
 function createUI(thisObj) {
     var myPanel = thisObj;
     
@@ -265,7 +329,18 @@ function createUI(thisObj) {
             alignLayers();
     }
 
+    uiY += 30.0;
+    var ease2keysBtn =  myPanel.add("button",[uiX,uiY,uiX+200, uiY +20] ,"Ease 2 keys");    
+    ease2keysBtn.onClick = function(){
+            ease2keys();
+    }
 
+
+    uiY += 30.0;
+    var ease2keysBackBtn =  myPanel.add("button",[uiX,uiY,uiX+200, uiY +20] ,"Ease 2 keys Back");    
+    ease2keysBackBtn.onClick = function(){
+            ease2keysBack();
+    }
 
     return myPanel;
 
