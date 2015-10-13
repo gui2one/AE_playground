@@ -81,8 +81,16 @@ function ease2keys(){
 
                 for( var i=0; i < prop.selectedKeys.length; i++){
                         $.writeln(prop.keyTime(prop.selectedKeys[i]) + "<--------");
-                        if(i == 0) { prop.setTemporalEaseAtKey(prop.selectedKeys[i],[easeIn] ,[easeOut]); }
-                        if(i == 1) { prop.setTemporalEaseAtKey(prop.selectedKeys[i],[easeOut] ,[easeIn]); }
+                        if(i == 0) { 
+                            prop.setTemporalEaseAtKey(prop.selectedKeys[i],[easeIn] ,[easeOut]); 
+                            // prop.setInterpolationTypeAtKey(prop.selectedKeys[i],KeyframeInterpolationType.LINEAR);
+                            prop.setSpatialContinuousAtKey(prop.selectedKeys[i],false);                            
+                        }
+                        if(i == 1) { 
+                            prop.setTemporalEaseAtKey(prop.selectedKeys[i],[easeOut] ,[easeIn]);
+                            // prop.setInterpolationTypeAtKey(prop.selectedKeys[i],KeyframeInterpolationType.LINEAR);
+                            prop.setSpatialContinuousAtKey(prop.selectedKeys[i],false);                            
+                        }
                         
                         
                 }
@@ -119,6 +127,7 @@ function ease2keysBack(){
                         }
                         if(i == 1) { 
                             prop.setTemporalEaseAtKey(prop.selectedKeys[i],[new KeyframeEase(0.0,30.0)] ,[easeIn]); 
+                            // prop.setInterpolationTypeAtKey(prop.selectedKeys[i],KeyframeInterpolationType.LINEAR);
                             prop.setSpatialContinuousAtKey(prop.selectedKeys[i],false);
                         }
         
