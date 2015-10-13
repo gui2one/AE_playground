@@ -50,6 +50,18 @@ function alignLayers(){
 }
 
 
+function validTime(givenTime){
+
+
+    var validTime = currentFormatToTime(  timeToCurrentFormat(givenTime ,25.0,false)  , 25.0 , false);    
+
+    return validTime;
+}
+
+function distance(x1, x2, y1, y2){
+
+    return (Math.sqrt( (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) ));
+}
 function ease2keys(){
 
     for (obj in app.project.activeItem.selectedLayers ){
@@ -82,33 +94,65 @@ function ease2keys(){
 
 function ease2keysBack(){
 
-    $.writeln(" ease2keysBack()------------------------------------");   
+    // $.writeln(" ease2keysBack()------------------------------------");   
     for (obj in app.project.activeItem.selectedLayers ){
             var layer = app.project.activeItem.selectedLayers[obj];
 
             var easeIn = new KeyframeEase(0.0,100.0);
-            var easeOut = new KeyframeEase(0.75, 85);
+            var easeOut = new KeyframeEase(0.0, 100.0);
              
             for (item in layer.selectedProperties){
 
                 prop = layer.selectedProperties[item];
-                $.writeln(prop.name);
-                $.writeln(prop.propertyValueType + "<::::::::::::::::");
-                $.writeln(prop.selectedKeys.length);
+                // $.writeln(prop.name);
+                // $.writeln(prop.propertyValueType + "<::::::::::::::::");
+                // $.writeln(prop.selectedKeys.length);
 
                 
 
                 for( var i=0; i < prop.selectedKeys.length; i++){
-                        $.writeln(prop.keyTime(prop.selectedKeys[i]) + "<--------");
-                        if(i == 0) { prop.setTemporalEaseAtKey(prop.selectedKeys[i],[easeIn] ,[easeOut]); }
-                        if(i == 1) { prop.setTemporalEaseAtKey(prop.selectedKeys[i],[new KeyframeEase(0.0,30.0)] ,[easeIn]); }
-                        
-                        
+                        // $.writeln(prop.keyTime(prop.selectedKeys[i]) + "<--------");
+                        if(i == 0) { 
+                            prop.setTemporalEaseAtKey(prop.selectedKeys[i],[easeIn] ,[easeOut]); 
+                            // prop.setInterpolationTypeAtKey(prop.selectedKeys[i],KeyframeInterpolationType.LINEAR);
+                            prop.setSpatialContinuousAtKey(prop.selectedKeys[i],false);
+                        }
+                        if(i == 1) { 
+                            prop.setTemporalEaseAtKey(prop.selectedKeys[i],[new KeyframeEase(0.0,30.0)] ,[easeIn]); 
+                            prop.setSpatialContinuousAtKey(prop.selectedKeys[i],false);
+                        }
+        
                 }
 
-                var k1 = prop.addKey(prop.keyTime(prop.selectedKeys[1]) - 0.1);
-                prop.setTemporalContinuousAtKey(k1, true);
-                $.writeln(" ADDED KEY------------------------------------");     
+                if ( prop.propertyValueType == PropertyValueType.ThreeD_SPATIAL ){
+
+                    $.writeln("ha !! got you . 3d spatial property");
+                    
+                    var x1 = prop.valueAtTime(  validTime(prop.keyTime(prop.selectedKeys[0]))   ,true)[0];
+                    // $.writeln(x1 + " : X1");
+                    var y1 = prop.valueAtTime(  validTime(prop.keyTime(prop.selectedKeys[0]))   ,true)[1];
+
+                    var x2 = prop.valueAtTime(  validTime(prop.keyTime(prop.selectedKeys[1]))   ,true)[0];
+                    var y2 = prop.valueAtTime(  validTime(prop.keyTime(prop.selectedKeys[1]))   ,true)[1];
+
+                    var dist = distance(x1 , x2, y1, y2);
+                    $.writeln(dist + " <----- distance");
+
+                        ////////////////////// ----------
+                    var spanTime = prop.keyTime(prop.selectedKeys[1]) - prop.keyTime(prop.selectedKeys[0]);
+                    $.writeln(spanTime + " -----> spanTime");
+                    var newKey = prop.addKey( validTime(prop.keyTime(prop.selectedKeys[1]) - spanTime/2.0)); ///////////////////
+                     
+                    prop.setTemporalEaseAtKey(newKey,[new KeyframeEase(dist*3.0,30.0)] ,[new KeyframeEase(dist*3.0,30.0)]);
+                    prop.setTemporalContinuousAtKey(newKey, true);  
+                    // prop.setSpatialAutoBezierAtKey(newKey, true);
+                    var newPos = [0,0];
+                    newPos[0] = x2 + (x2-x1) / 10.0;
+                    newPos[1] = y2 + (y2-y1) / 10.0;
+                    prop.setValueAtKey(newKey, newPos);
+                }
+
+                // $.writeln(" ADDED KEY------------------------------------");     
             }
             
     }
@@ -199,7 +243,7 @@ function createUI(thisObj) {
                                     yVal = startPos[1];
                         }                    
                         var posK1 = posProp.addKey(layer.time);
-                        posProp.setInterpolationTypeAtKey(posK1,KeyframeInterpolationType.BEZIER); 
+                        posProp.setInterpolationTypeAtKey(posK1,KeyframeInterpolationType.LINEAR); 
                         
                         var easeIn = new KeyframeEase(0.0,100.0);
                         var easeOut = new KeyframeEase(0.75, 85);
@@ -208,7 +252,7 @@ function createUI(thisObj) {
                         var posK2 = posProp.addKey(offsetTime);
    
                         posProp.setValueAtTime(offsetTime, [xVal,  yVal]); // Math.floor to convert string to int ( weird I know ....)
-                        posProp.setInterpolationTypeAtKey(posK2,KeyframeInterpolationType.BEZIER);        
+                        posProp.setInterpolationTypeAtKey(posK2,KeyframeInterpolationType.LINEAR);        
                         var easeIn2 = new KeyframeEase(0.0,100.0);
                         var easeOut2 = new KeyframeEase(0, 0.1);
                         posProp.setTemporalEaseAtKey(posK1,[easeIn2] ,[easeOut2]);        
@@ -277,7 +321,7 @@ function createUI(thisObj) {
                     $.writeln(startPos[0]);
                     var posK1 = posProp.addKey(layer.time);
                     $.writeln(posK1 + " : posK1");
-                    posProp.setInterpolationTypeAtKey(posK1,KeyframeInterpolationType.BEZIER); 
+                    posProp.setInterpolationTypeAtKey(posK1,KeyframeInterpolationType.LINEAR); 
                     
                     var easeIn = new KeyframeEase(0.0,0.1);
                     var easeOut = new KeyframeEase(0, 100.0);
@@ -290,7 +334,7 @@ function createUI(thisObj) {
                     var posK2 = posProp.addKey(offsetTime);
                     $.writeln(posK2 + " : posK2");
                     posProp.setValueAtTime(offsetTime, [startPos[0]+ Math.floor(spatialOffsetSliderOutText.text),  startPos[1]]); // Math.floor to convert string to int ( weird I know ....)
-                    posProp.setInterpolationTypeAtKey(posK2,KeyframeInterpolationType.BEZIER);        
+                    posProp.setInterpolationTypeAtKey(posK2,KeyframeInterpolationType.LINEAR);        
 
                     posProp.setTemporalEaseAtKey(posK1,[easeIn] ,[easeOut]);        
                     
@@ -339,7 +383,10 @@ function createUI(thisObj) {
     uiY += 30.0;
     var ease2keysBackBtn =  myPanel.add("button",[uiX,uiY,uiX+200, uiY +20] ,"Ease 2 keys Back");    
     ease2keysBackBtn.onClick = function(){
+            
             ease2keysBack();
+
+
     }
 
     return myPanel;
