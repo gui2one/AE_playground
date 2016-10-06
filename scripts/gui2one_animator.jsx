@@ -92,20 +92,20 @@ function ease2keys(){
                                 }
                     }
                }
-                $.writeln("!!!!!!!");
-                $.writeln(prop.property != undefined);
-                $.writeln("!!!!!!!");
-                $.writeln(prop.propertyValueType +  "<````:::::::::::::");
+//~                 $.writeln("!!!!!!!");
+//~                 $.writeln(prop.property != undefined);
+//~                 $.writeln("!!!!!!!");
+//~                 $.writeln(prop.propertyValueType +  "<````:::::::::::::");
                 switch (prop.propertyValueType)
                 {
                     
                         case PropertyValueType.OneD:
-                            $.writeln("-->  PropertyValueType.OneD");
+                            writeLn("-->  PropertyValueType.OneD");
                             
                             for( var i=0; i < prop.selectedKeys.length; i++){
                                     var easeIn = new KeyframeEase(0.0,100.0);
                                     var easeOut = new KeyframeEase(0.75, 85);
-                                    $.writeln(prop.keyTime(prop.selectedKeys[i]) + "<--------");
+//~                                     $.writeln(prop.keyTime(prop.selectedKeys[i]) + "<--------");
                                     if(i == 0) { 
                                         prop.setTemporalEaseAtKey(prop.selectedKeys[i],[easeIn] ,[easeOut]); 
                                         // prop.setInterpolationTypeAtKey(prop.selectedKeys[i],KeyframeInterpolationType.LINEAR);
@@ -118,21 +118,21 @@ function ease2keys(){
                                     }
 
                             }
-                            $.writeln("------------------------------------");                                 
+//~                             $.writeln("------------------------------------");                                 
                             break;
                             
                             
                         case PropertyValueType.TwoD:
-                            $.writeln("-->  PropertyValueType.TwoD");
+//~                             $.writeln("-->  PropertyValueType.TwoD");
                             break;
                             
                             
                         case PropertyValueType.ThreeD:
-                            $.writeln( "-->  PropertyValueType.ThreeD");        
+//~                             $.writeln( "-->  PropertyValueType.ThreeD");        
                             var easeIn = new KeyframeEase(0.0,100.0);
                             var easeOut = new KeyframeEase(0.75, 85);                            
                             for( var i=0; i < prop.selectedKeys.length; i++){
-                                    $.writeln(prop.keyTime(prop.selectedKeys[i]) + "<--------");
+//~                                     $.writeln(prop.keyTime(prop.selectedKeys[i]) + "<--------");
                                     if(i == 0) { 
                                         prop.setTemporalEaseAtKey(prop.selectedKeys[i],[easeIn, easeIn, easeIn] ,[easeOut, easeOut, easeOut]); 
                                         // prop.setInterpolationTypeAtKey(prop.selectedKeys[i],KeyframeInterpolationType.LINEAR);
@@ -145,16 +145,16 @@ function ease2keys(){
                                     }
 
                             }
-                            $.writeln("------------------------------------");                                 
+//~                             $.writeln("------------------------------------");                                 
                             break;
                             
                             
                         case PropertyValueType.TwoD_SPATIAL:
-                            $.writeln( "-->  PropertyValueType.TwoD_SPATIAL");      
+                            writeLn( "-->  PropertyValueType.TwoD_SPATIAL");      
                             for( var i=0; i < prop.selectedKeys.length; i++){
                                     var easeIn = new KeyframeEase(0.0,100.0);
                                     var easeOut = new KeyframeEase(0.75, 85);
-                                    $.writeln(prop.keyTime(prop.selectedKeys[i]) + "<--------");
+//~                                     $.writeln(prop.keyTime(prop.selectedKeys[i]) + "<--------");
                                     if(i == 0) { 
                                         prop.setTemporalEaseAtKey(prop.selectedKeys[i],[easeIn] ,[easeOut]); 
                                         // prop.setInterpolationTypeAtKey(prop.selectedKeys[i],KeyframeInterpolationType.LINEAR);
@@ -171,11 +171,11 @@ function ease2keys(){
                             
                             
                         case PropertyValueType.ThreeD_SPATIAL:
-                            $.writeln("-->  PropertyValueType.ThreeD_SPATIAL");        
+                            writeLn("-->  PropertyValueType.ThreeD_SPATIAL");        
                             for( var i=0; i < prop.selectedKeys.length; i++){
                                     var easeIn = new KeyframeEase(0.0,100.0);
                                     var easeOut = new KeyframeEase(0.75, 85);
-                                    $.writeln(prop.keyTime(prop.selectedKeys[i]) + "<--------");
+//~                                     $.writeln(prop.keyTime(prop.selectedKeys[i]) + "<--------");
                                     if(i == 0) { 
                                         prop.setTemporalEaseAtKey(prop.selectedKeys[i],[easeIn] ,[easeOut]); 
                                         // prop.setInterpolationTypeAtKey(prop.selectedKeys[i],KeyframeInterpolationType.LINEAR);
@@ -188,29 +188,29 @@ function ease2keys(){
                                     }
 
                             }
-                            $.writeln("------------------------------------");     
+//~                             $.writeln("------------------------------------");     
                                                     
                             break;
                         case PropertyValueType.COLOR:
-                            $.writeln( "-->  PropertyValueType.COLOR");         
+                           writeLn( "-->  PropertyValueType.COLOR");         
                             break;
                         case PropertyValueType.MARKER:
-                            $.writeln( "-->  PropertyValueType.MARKER");                             
+                            writeLn( "-->  PropertyValueType.MARKER");                             
                             break;
                         case PropertyValueType.LAYER_INDEX:
-                            $.writeln("-->  PropertyValueType.LAYER_INDEX");                             
+                            writeLn("-->  PropertyValueType.LAYER_INDEX");                             
                             break;
                         case PropertyValueType.MASK_INDEX:
-                            $.writeln("-->  PropertyValueType.MASK_INDEX");                             
+                            writeLn("-->  PropertyValueType.MASK_INDEX");                             
                             break;
                         case PropertyValueType.SHAPE:
-                            $.writeln( "-->  PropertyValueType.SHAPE");                             
+                            writeLn( "-->  PropertyValueType.SHAPE");                             
                             break;
                         case PropertyValueType.TEXT_DOCUMENT:         
-                            $.writeln( "-->  PropertyValueType.TEXT_DOCUMENT");                             
+                            writeLn( "-->  PropertyValueType.TEXT_DOCUMENT");                             
                             break;                        
                     }
-                $.writeln(prop.selectedKeys.length);
+//~                 $.writeln(prop.selectedKeys.length);
 
         }
 
@@ -235,8 +235,8 @@ app.beginUndoGroup("ease 2 keys back");
             for (item in layer.selectedProperties){
 
                 prop = layer.selectedProperties[item];
-                 $.writeln(prop.name);
-                 $.writeln(prop.propertyValueType + "<::::::::::::::::" + PropertyValueType.ThreeD);
+//~                  $.writeln(prop.name);
+//~                  $.writeln(prop.propertyValueType + "<::::::::::::::::" + PropertyValueType.ThreeD);
                 // $.writeln(prop.selectedKeys.length);
 
                 
@@ -261,7 +261,7 @@ app.beginUndoGroup("ease 2 keys back");
             
                     }
 
-                    $.writeln("ha !! got you . 3d spatial property");
+//~                     $.writeln("ha !! got you . 3d spatial property");
                     
                     var x1 = prop.valueAtTime(  validTime(prop.keyTime(prop.selectedKeys[0]))   ,true)[0];
                     // $.writeln(x1 + " : X1");
@@ -271,11 +271,11 @@ app.beginUndoGroup("ease 2 keys back");
                     var y2 = prop.valueAtTime(  validTime(prop.keyTime(prop.selectedKeys[1]))   ,true)[1];
 
                     var dist = distance(x1 , x2, y1, y2);
-                    $.writeln(dist + " <----- distance");
+//~                     $.writeln(dist + " <----- distance");
 
                         ////////////////////// ----------
                     var spanTime = prop.keyTime(prop.selectedKeys[1]) - prop.keyTime(prop.selectedKeys[0]);
-                    $.writeln(spanTime + " -----> spanTime");
+//~                     $.writeln(spanTime + " -----> spanTime");
                     var newKey = prop.addKey( validTime(prop.keyTime(prop.selectedKeys[1]) - spanTime/2.0)); ///////////////////
                      
                     prop.setTemporalEaseAtKey(newKey,[new KeyframeEase(dist*3.0,30.0)] ,[new KeyframeEase(dist*3.0,30.0)]);
@@ -289,7 +289,7 @@ app.beginUndoGroup("ease 2 keys back");
 
                 if ( prop.propertyValueType == PropertyValueType.ThreeD ){
                     for( var i=0; i < prop.selectedKeys.length; i++){
-                             $.writeln(prop.keyTime(prop.selectedKeys[i]) + "<--------");
+//~                              $.writeln(prop.keyTime(prop.selectedKeys[i]) + "<--------");
 /*                            if(i == 0) { 
                                 prop.setTemporalEaseAtKey(prop.selectedKeys[i],[easeIn] ,[easeOut]); 
                                 // prop.setInterpolationTypeAtKey(prop.selectedKeys[i],KeyframeInterpolationType.LINEAR);
@@ -303,7 +303,7 @@ app.beginUndoGroup("ease 2 keys back");
             
                     }
 
-                    $.writeln("3d non spatial property");
+//~                     $.writeln("3d non spatial property");
                     
                     var x1 = prop.valueAtTime(  validTime(prop.keyTime(prop.selectedKeys[0]))   ,true)[0];
                     // $.writeln(x1 + " : X1");
@@ -313,11 +313,11 @@ app.beginUndoGroup("ease 2 keys back");
 
 
                     var dist = x2 - x1;
-                    $.writeln(dist + " <----- distance");
+//~                     $.writeln(dist + " <----- distance");
 
                         ////////////////////// ----------
                     var spanTime = prop.keyTime(prop.selectedKeys[1]) - prop.keyTime(prop.selectedKeys[0]);
-                    $.writeln(spanTime + " -----> spanTime");
+//~                     $.writeln(spanTime + " -----> spanTime");
                     var newKey = prop.addKey( validTime(prop.keyTime(prop.selectedKeys[1]) - spanTime/4.0)); ///////////////////
                      
 /*                    prop.setTemporalEaseAtKey(newKey,[new KeyframeEase(dist*3.0,30.0)] ,[new KeyframeEase(dist*3.0,30.0)]);*/
@@ -406,7 +406,7 @@ function createUI(thisObj) {
                 //$.writeln(parseFloat(timeOffsetSliderInText.text) + 2);
                 
                 floatVal = layer.time  - (Math.floor(parseFloat(timeOffsetSliderInText.text))/25.0)
-                $.writeln(floatVal + "---------------");
+//~                 $.writeln(floatVal + "---------------");
                 // properley converts time to frame number and back to time, to avoid "in between" keyframes keys
                 var offsetTime = currentFormatToTime(  timeToCurrentFormat(floatVal,25.0,false)  , 25.0 , false);
                 
@@ -531,9 +531,9 @@ function createUI(thisObj) {
                     var layer = app.project.activeItem.selectedLayers[i];
                     var posProp = layer.property("Position");
                     var startPos = posProp.value;
-                    $.writeln(startPos[0]);
+//~                     $.writeln(startPos[0]);
                     var posK1 = posProp.addKey(layer.time);
-                    $.writeln(posK1 + " : posK1");
+//~                     $.writeln(posK1 + " : posK1");
                     posProp.setInterpolationTypeAtKey(posK1,KeyframeInterpolationType.LINEAR); 
                     
                     var easeIn = new KeyframeEase(0.0,0.1);
@@ -545,7 +545,7 @@ function createUI(thisObj) {
                     var offsetTime = currentFormatToTime(  timeToCurrentFormat(layer.time  + (Math.floor(timeOffsetSliderOutText.text)/25.0) ,25.0,false)  , 25.0 , false);
                     
                     var posK2 = posProp.addKey(offsetTime);
-                    $.writeln(posK2 + " : posK2");
+//~                     $.writeln(posK2 + " : posK2");
                     posProp.setValueAtTime(offsetTime, [startPos[0]+ Math.floor(spatialOffsetSliderOutText.text),  startPos[1]]); // Math.floor to convert string to int ( weird I know ....)
                     posProp.setInterpolationTypeAtKey(posK2,KeyframeInterpolationType.LINEAR);        
 
@@ -606,7 +606,7 @@ function createUI(thisObj) {
     var arghButton =  myPanel.add("button",[uiX,uiY,uiX+200, uiY +20] ,"Argghhhh !!!");    
     arghButton.onClick = function(){
             
-            $.writeln(app.project.activeItem.selectedLayers[0].time);
+//~             $.writeln(app.project.activeItem.selectedLayers[0].time);
 
 
     }
