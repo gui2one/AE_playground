@@ -33,7 +33,7 @@
 
 function trimToCursor( trimSide){
 
-        
+        app.beginUndoGroup("trimToCursor");
         var selectedLayers = app.project.activeItem.selectedLayers;
         var cursorTime =  app.project.activeItem.time;  
         if(selectedLayers.length == 0){
@@ -59,7 +59,7 @@ function trimToCursor( trimSide){
             }
         }
     
-        
+        app.endUndoGroup();
 }
 
 
@@ -148,8 +148,8 @@ function elastic(){
                 $.writeln("---------------------");
                 for(var n=0; n<selectedProps.length; n++){
                         var prop = selectedProps[n];
-//~                         $.writeln(prop.name);
-//~                         $.writeln(prop.propertyType == PropertyType.PROPERTY);
+                         // $.writeln(prop.name);
+                         // $.writeln(prop.propertyType == PropertyType.PROPERTY);
                         var ampSlider = currentLayer.Effects.addProperty("ADBE Slider Control");
                         ampSlider.name = prop.name+"_elasticAmplitude";
                         var ampSliderName = ampSlider.name;
@@ -188,7 +188,7 @@ function elastic(){
                         }'
                         ;
                         
-//~                         var posName = ampSlider.name;
+
                         
                        expressionString = expressionString.replace("AMP_SLIDER",ampSliderName);
                        expressionString = expressionString.replace("FREQ_SLIDER",freqSliderName);
@@ -237,8 +237,8 @@ function bounceBack(){
                 $.writeln("---------------------");
                 for(var n=0; n<selectedProps.length; n++){
                         var prop = selectedProps[n];
-//~                         $.writeln(prop.name);
-//~                         $.writeln(prop.propertyType == PropertyType.PROPERTY);
+                        // $.writeln(prop.name);
+                        // $.writeln(prop.propertyType == PropertyType.PROPERTY);
                         var bounceSlider = currentLayer.Effects.addProperty("ADBE Slider Control");
                         bounceSlider.name = prop.name+"_bounceAmplitude";
                         var bounceSliderName = bounceSlider.name;
@@ -255,44 +255,44 @@ function bounceBack(){
                         var maxBounceSliderName = maxBounceSlider.name;
                         maxBounceSlider.property(1).setValue(9.0);                            
                         expressionString = 'e = effect("BOUNCE_SLIDER")("Slider");\
-g = effect("GRAVITY_SLIDER")("Slider");\
-nMax = effect("MAX_BOUNCE_SLIDER")("Slider");\
-n = 0;\
-if (numKeys > 0){\
-n = nearestKey(time).index;\
-if (key(n).time > time) n--;\
-}\
-if (n > 0){\
-  t = time - key(n).time;\
-  v = -velocityAtTime(key(n).time - .001)*e;\
-  vl = length(v);\
-  if (value instanceof Array){\
-    vu = (vl > 0) ? normalize(v) : [0,0,0];\
-  }else{\
-    vu = (v < 0) ? -1 : 1;\
-}\
-tCur = 0;\
-segDur = 2*vl/g;\
-tNext = segDur;\
-nb = 1; // number of bounces\
-while (tNext < t && nb <= nMax){\
-vl *= e;\
-segDur *= e;\
-tCur = tNext;\
-tNext += segDur;\
-nb++\
-}\
-if(nb <= nMax){\
-delta = t - tCur;\
-value +  vu*delta*(vl - g*delta/2);\
-}else{\
-value\
-}\
-}else\
-value'
-  ;
+                                            g = effect("GRAVITY_SLIDER")("Slider");\
+                                            nMax = effect("MAX_BOUNCE_SLIDER")("Slider");\
+                                            n = 0;\
+                                            if (numKeys > 0){\
+                                            n = nearestKey(time).index;\
+                                            if (key(n).time > time) n--;\
+                                            }\
+                                            if (n > 0){\
+                                              t = time - key(n).time;\
+                                              v = -velocityAtTime(key(n).time - .001)*e;\
+                                              vl = length(v);\
+                                              if (value instanceof Array){\
+                                                vu = (vl > 0) ? normalize(v) : [0,0,0];\
+                                              }else{\
+                                                vu = (v < 0) ? -1 : 1;\
+                                            }\
+                                            tCur = 0;\
+                                            segDur = 2*vl/g;\
+                                            tNext = segDur;\
+                                            nb = 1; // number of bounces\
+                                            while (tNext < t && nb <= nMax){\
+                                            vl *= e;\
+                                            segDur *= e;\
+                                            tCur = tNext;\
+                                            tNext += segDur;\
+                                            nb++\
+                                            }\
+                                            if(nb <= nMax){\
+                                            delta = t - tCur;\
+                                            value +  vu*delta*(vl - g*delta/2);\
+                                            }else{\
+                                            value\
+                                            }\
+                                            }else\
+                                            value'
+                                              ;
                         
-//~                         var posName = ampSlider.name;
+                         // var posName = ampSlider.name;
                         
                        expressionString = expressionString.replace("BOUNCE_SLIDER",bounceSliderName);
                        expressionString = expressionString.replace("GRAVITY_SLIDER",gravitySliderName);
@@ -309,6 +309,204 @@ value'
         //app.project.item(index).layer(index).propertySpec.expression
         
 }
+
+function inFrontOfCam(_distance){
+    
+    app.beginUndoGroup("inFrontOfCam");
+
+        var layer = app.project.activeItem.selectedLayers[0];
+        var time = app.project.activeItem.time;
+        var posHasKeys = layer.transform.position.numKeys != 0;
+        var orientHasKeys = layer.transform.orientation.numKeys != 0;
+        var activeCam = app.project.activeItem.activeCamera;
+        if(_distance == undefined){
+
+            _distance = activeCam.property("Focus Distance").value;
+        }
+        if( orientHasKeys ) {
+            // alert(time);
+            layer.transform.orientation.setValueAtTime(time,[ 0.0,0.0, 0.0]);      
+        }else{
+            layer.transform.orientation.setValue([ 0.0,0.0, 0.0]);      
+        }
+
+        if(posHasKeys){
+
+            layer.transform.position.setValueAtTime(time,[ 0.0,0.0, _distance]);
+        }else{  
+            layer.transform.position.setValue([ 0.0,0.0, _distance]);
+        }
+
+        // alert(activeCam.property("Focus Distance").value);
+        
+        layer.setParentWithJump(activeCam);
+        
+        layer.parent = null; // reset parent to none
+        
+    app.endUndoGroup();    
+        
+}
+
+
+function copyStyle(){
+
+    var layer = app.project.activeItem.selectedLayers[0];
+    try{
+
+        if(layer instanceof TextLayer){
+            myProps = [];
+            myValues = [];
+            
+            var textProp = layer.property("Source Text");
+            var textDocument = textProp.value;
+            //textDocument.strokeWidth = 10;
+
+    
+
+            myProps.push("'fontSize'");
+            myValues.push(textDocument.fontSize);
+
+            myProps.push("'fillColor'");
+            myValues.push("["+textDocument.fillColor.toString()+"]");           
+
+            myProps.push("'strokeColor'");
+            myValues.push("["+textDocument.strokeColor.toString()+"]"); 
+
+            myProps.push("'strokeWidth'");
+            myValues.push(textDocument.strokeWidth); 
+
+            myProps.push("'font'");
+            myValues.push("'"+textDocument.font+"'"); 
+
+            myProps.push("'strokeOverFill'");
+            myValues.push(textDocument.strokeOverFill); 
+
+            myProps.push("'fillOverStroke'");
+            myValues.push(textDocument.fillOverStroke); 
+
+            myProps.push("'allStrokesOverAllFills'");
+            myValues.push(textDocument.allStrokesOverAllFills); 
+
+            myProps.push("'allFillsOverAllStrokes'");
+            myValues.push(textDocument.allFillsOverAllStrokes); 
+
+            myProps.push("'applyStroke'");
+            myValues.push(textDocument.applyStroke); 
+
+            myProps.push("'applyFill'");
+            myValues.push(textDocument.applyFill); 
+
+            // myProps.push("text");
+            // myValues.push(textDocument.text);       
+
+            myProps.push("'justification'");
+            myValues.push(textDocument.justification);       
+
+            myProps.push("'tracking'");
+            myValues.push(textDocument.tracking);            
+
+            // alert(myProps.length);
+
+            //textProp.setValue(textDocument);
+
+            // var string = "This is text for clipboard test";  
+            // system("echo "+ string +"|clip");  
+            // myString = "Happy holidays!";
+            // textDocument.resetCharStyle();
+            // textDocument.fontSize = 60;
+            // textDocument.fillColor = [1, 0, 0];
+            // textDocument.strokeColor = [0, 1, 0];
+            // textDocument.strokeWidth = 2;
+            // textDocument.font = "TimesNewRomanPSMT";
+            // textDocument.strokeOverFill = true;
+            // textDocument.applyStroke = true;
+            // textDocument.applyFill = true;
+            // textDocument.text = myString;
+            // textDocument.justification = ParagraphJustification.CENTER_JUSTIFY;
+            // textDocument.tracking = 50;
+            // textProp.setValue(textDocument);        
+        }
+
+
+    var str = textDocument.strokeWidth.toString();  
+    copyTextToClipboard(str);
+      
+    function copyTextToClipboard(text){  
+       var folderForTempFiles = Folder.temp.fsName;  
+       var clipBatFile =new File(folderForTempFiles + "/tempTextStyle.txt");  
+       clipBatFile.open('w');  
+       clipBatFile.writeln(myProps.toString());  
+       clipBatFile.writeln(myValues.toString());  
+       clipBatFile.close();  
+       //clipBatFile.execute();  
+       //clipBatFile.remove();  
+    };
+
+    }catch(err){
+
+        alert(err.line.toString() + "\r" + err.toString());
+    }
+
+
+    // var textProp = myTextL ayer.property("Source Text");
+
+
+}
+
+
+function pasteStyle(){
+    app.beginUndoGroup("pasteTextStyle");
+        var layer = app.project.activeItem.selectedLayers[0];
+        try{
+
+            if(layer instanceof TextLayer){
+                //var str = textDocument.strokeWidth.toString();  
+                readTextFromClipboard();
+
+                function readTextFromClipboard(){  
+
+                    var folderForTempFiles = Folder.temp.fsName;  
+                    var clipBatFile =new File(folderForTempFiles + "/tempTextStyle.txt");  
+                    clipBatFile.open('r');  
+
+                    var myProps = (new Function("return [" + clipBatFile.readln().toString() + "];")());
+                    // // var myProps = JSON.parse("[" + clipBatFile.readln() + " ]");
+
+     
+                    var myValues = (new Function("return [" + clipBatFile.readln()+ "];")());
+
+
+                    clipBatFile.close();  
+
+
+
+                    var textProp = layer.property("Source Text")
+                    var textDocument = textProp.value;
+
+                    for (var i = 0; i < myProps.length; i++) {
+                              textDocument[myProps[i]] = myValues[i];
+                              //alert(textDocument[myProps[i]]);
+                    };        
+
+                    textProp.setValue(textDocument);
+                    //alert(myValues);
+                    //clipBatFile.execute();  
+                       //clipBatFile.remove();  
+          
+            }
+
+
+        };
+
+        }catch(err){
+
+            alert("line :"+err.line.toString() + "\r" + err.toString());
+        }
+
+    app.endUndoGroup();
+
+}
+
 function createUI(thisObj) {
     var myPanel = thisObj;
     
@@ -358,6 +556,40 @@ function createUI(thisObj) {
     bounceBackButton.onClick = function(){
              bounceBack();
     }
+
+
+    uiY += 40.0;
+    myPanel.add("statictext",[uiX + 100,uiY,uiX+150,uiY+20],"distance :");
+    var zCameraDistance = myPanel.add("EditText",[uiX+160,uiY,uiX+210,uiY+20], 1000);
+    var toggleLockToFocusDistance = myPanel.add("checkbox",[uiX+110,uiY+20,uiX+500,uiY+40], "lock to Focus dist");
+    var inFrontOfCamButton = myPanel.add("button",[uiX,uiY,uiX+100,uiY+30] ,"In Front Of Cam");    
+    inFrontOfCamButton.onClick = function(){
+
+        // alert(toggleLockToFocusDistance.value);
+        if(toggleLockToFocusDistance.value == false){
+            inFrontOfCam(zCameraDistance.text);   
+        }else{
+
+            inFrontOfCam();
+        }
+         
+    }
+
+// new column
+    uiX = 150;
+    uiY = 30.0;
+    var copyStyleButton= myPanel.add("button",[uiX,uiY,uiX+100,uiY+30] ,"Copy Style");    
+    copyStyleButton.onClick = function(){
+             copyStyle();
+    }    
+
+    
+    uiY += 35.0;
+    var pasteStyleButton= myPanel.add("button",[uiX,uiY,uiX+100,uiY+30] ,"Paste Style");    
+    pasteStyleButton.onClick = function(){
+             pasteStyle();
+    }     
+     
 
 
 
