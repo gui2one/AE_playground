@@ -1,4 +1,10 @@
-﻿function findCompByName(name){
+﻿
+function string_of_enum(enumVal,value){
+  for (var k in enumVal) if (enumVal[k] == value) return k;
+  return null;
+}    
+
+function findCompByName(name){
     var myCompName = name;
     var myComp = null;
     for (var i = 1; i <= app.project.numItems; i ++){
@@ -22,7 +28,7 @@ function offsetLayersTime(frames){
     for (var i=0; i < numSelected; i++ ){
             var layer = app.project.activeItem.selectedLayers[i];            
 
-//~             $.writeln(layer.startTime);
+
             layer.startTime = validTime(layer.startTime + inc);
             
             inc += frames / 25.0;
@@ -242,9 +248,9 @@ function ease2keys_IN(_power){
                     
                     
                     if(isPropertyGroup){
-                        for(var i=0; i< prop.numProperties; i++){
-                                if(prop.property(i+1).selected){
-                                    prop = prop.property(i+1);
+                        for(var k=0; k< prop.numProperties; k++){
+                                if(prop.property(k+1).selected){
+                                    prop = prop.property(k+1);
                                     break;
                                     }
                         }
@@ -255,17 +261,17 @@ function ease2keys_IN(_power){
                         case PropertyValueType.OneD:
                             writeLn("-->  PropertyValueType.OneD");
                             
-                            for( var i=0; i < prop.selectedKeys.length; i++){
+                            for( var k=0; k < prop.selectedKeys.length; k++){
                                 var easeIn = new KeyframeEase(0.0,1);
                                 var easeOut = new KeyframeEase(0.0, EASE_POWER);
 
-                                if(i == 0) { 
-                                    prop.setTemporalEaseAtKey(prop.selectedKeys[i],[easeIn] ,[easeOut]); 
+                                if(k == 0) { 
+                                    prop.setTemporalEaseAtKey(prop.selectedKeys[k],[easeIn] ,[easeOut]); 
 
                                               
                                 }
-                                if(i == 1) { 
-                                    prop.setTemporalEaseAtKey(prop.selectedKeys[i],[easeIn] ,[easeIn]);                                    
+                                if(k == 1) { 
+                                    prop.setTemporalEaseAtKey(prop.selectedKeys[k],[easeIn] ,[easeIn]);                                    
                                               
                                 }
 
@@ -283,15 +289,15 @@ function ease2keys_IN(_power){
                             writeLn("-->  PropertyValueType.ThreeD");
                             var easeIn = new KeyframeEase(0.0,1);
                             var easeOut = new KeyframeEase(0.0, EASE_POWER);                            
-                            for( var i=0; i < prop.selectedKeys.length; i++){
+                            for( var k=0; k < prop.selectedKeys.length; k++){
 
-                                if(i == 0) { 
-                                    prop.setTemporalEaseAtKey(prop.selectedKeys[i],[easeIn, easeIn, easeIn] ,[easeOut, easeOut, easeOut]); 
+                                if(k == 0) { 
+                                    prop.setTemporalEaseAtKey(prop.selectedKeys[k],[easeIn, easeIn, easeIn] ,[easeOut, easeOut, easeOut]); 
                                    
 
                                 }
-                                if(i == 1) { 
-                                    prop.setTemporalEaseAtKey(prop.selectedKeys[i],[easeIn, easeIn, easeIn] ,[easeIn, easeIn, easeIn]);
+                                if(k == 1) { 
+                                    prop.setTemporalEaseAtKey(prop.selectedKeys[k],[easeIn, easeIn, easeIn] ,[easeIn, easeIn, easeIn]);
                                     
 
                                 }
@@ -303,18 +309,18 @@ function ease2keys_IN(_power){
                             
                         case PropertyValueType.TwoD_SPATIAL:
                             writeLn( "-->  PropertyValueType.TwoD_SPATIAL");      
-                            for( var i=0; i < prop.selectedKeys.length; i++){
+                            for( var k=0; k < prop.selectedKeys.length; k++){
                                     var easeIn = new KeyframeEase(0.0,1);
                                     var easeOut = new KeyframeEase(0.0, EASE_POWER);
 
-                                if(i == 0) { 
-                                    prop.setTemporalEaseAtKey(prop.selectedKeys[i],[easeIn] ,[easeOut]); 
+                                if(k == 0) { 
+                                    prop.setTemporalEaseAtKey(prop.selectedKeys[k],[easeIn] ,[easeOut]); 
                                     
-                                    prop.setSpatialContinuousAtKey(prop.selectedKeys[i],false);                            
+                                    prop.setSpatialContinuousAtKey(prop.selectedKeys[k],false);                            
                                 }
-                                if(i == 1) { 
-                                    prop.setTemporalEaseAtKey(prop.selectedKeys[i],[easeIn] ,[easeIn]);                            
-                                    prop.setSpatialContinuousAtKey(prop.selectedKeys[i],false);                            
+                                if(k == 1) { 
+                                    prop.setTemporalEaseAtKey(prop.selectedKeys[k],[easeIn] ,[easeIn]);                            
+                                    prop.setSpatialContinuousAtKey(prop.selectedKeys[k],false);                            
                                 }
 
                             }                            
@@ -324,17 +330,17 @@ function ease2keys_IN(_power){
                         case PropertyValueType.ThreeD_SPATIAL:
                             writeLn("EASE IN -->  PropertyValueType.ThreeD_SPATIAL");   
                             writeLn(prop.selectedKeys.length);     
-                            for( var i=0; i < prop.selectedKeys.length; i++){
+                            for( var k=0; k < prop.selectedKeys.length; k++){
                                 var easeIn = new KeyframeEase(0.0,1);
                                 var easeOut = new KeyframeEase(0.0, EASE_POWER);
 
-                                if(i == 0) { 
-                                    prop.setTemporalEaseAtKey(prop.selectedKeys[i],[easeIn] ,[easeOut]); 
+                                if(k == 0) { 
+                                    prop.setTemporalEaseAtKey(prop.selectedKeys[k],[easeIn] ,[easeOut]); 
 
-                                    prop.setSpatialContinuousAtKey(prop.selectedKeys[i],false);                            
+                                    prop.setSpatialContinuousAtKey(prop.selectedKeys[k],false);                            
                                 }
-                                if(i == 1) { 
-                                    prop.setTemporalEaseAtKey(prop.selectedKeys[i],[easeIn] ,[easeIn]);
+                                if(k == 1) { 
+                                    prop.setTemporalEaseAtKey(prop.selectedKeys[k],[easeIn] ,[easeIn]);
 
                                     //prop.setSpatialContinuousAtKey(prop.selectedKeys[i],false);                            
                                 }
@@ -392,9 +398,9 @@ function ease2keys_OUT(_power){
                     
                     
                     if(isPropertyGroup){
-                        for(var i=0; i< prop.numProperties; i++){
-                                if(prop.property(i+1).selected){
-                                    prop = prop.property(i+1);
+                        for(var k=0; k< prop.numProperties; k++){
+                                if(prop.property(k+1).selected){
+                                    prop = prop.property(k+1);
                                     break;
                                     }
                         }
@@ -405,17 +411,17 @@ function ease2keys_OUT(_power){
                         case PropertyValueType.OneD:
                             writeLn("-->  PropertyValueType.OneD");
                             
-                            for( var i=0; i < prop.selectedKeys.length; i++){
+                            for( var k=0; k < prop.selectedKeys.length; k++){
                                 var easeIn = new KeyframeEase(0.0,1);
                                 var easeOut = new KeyframeEase(0.0, EASE_POWER);
 
-                                if(i == 0) { 
-                                    prop.setTemporalEaseAtKey(prop.selectedKeys[i],[easeIn] ,[easeIn]); 
+                                if(k == 0) { 
+                                    prop.setTemporalEaseAtKey(prop.selectedKeys[k],[easeIn] ,[easeIn]); 
 
                                               
                                 }
-                                if(i == 1) { 
-                                    prop.setTemporalEaseAtKey(prop.selectedKeys[i],[easeOut] ,[easeIn]);                                    
+                                if(k == 1) { 
+                                    prop.setTemporalEaseAtKey(prop.selectedKeys[k],[easeOut] ,[easeIn]);                                    
                                               
                                 }
 
@@ -433,15 +439,15 @@ function ease2keys_OUT(_power){
                             writeLn("-->  PropertyValueType.ThreeD");
                             var easeIn = new KeyframeEase(0.0,1);
                             var easeOut = new KeyframeEase(0.0, EASE_POWER);                            
-                            for( var i=0; i < prop.selectedKeys.length; i++){
+                            for( var k=0; k < prop.selectedKeys.length; k++){
 
-                                if(i == 0) { 
-                                    prop.setTemporalEaseAtKey(prop.selectedKeys[i],[easeIn, easeIn, easeIn] ,[easeIn, easeIn, easeIn]); 
+                                if(k == 0) { 
+                                    prop.setTemporalEaseAtKey(prop.selectedKeys[k],[easeIn, easeIn, easeIn] ,[easeIn, easeIn, easeIn]); 
                                    
 
                                 }
-                                if(i == 1) { 
-                                    prop.setTemporalEaseAtKey(prop.selectedKeys[i],[easeOut, easeOut, easeOut] ,[easeIn, easeIn, easeIn]);
+                                if(k == 1) { 
+                                    prop.setTemporalEaseAtKey(prop.selectedKeys[k],[easeOut, easeOut, easeOut] ,[easeIn, easeIn, easeIn]);
                                     
 
                                 }
@@ -453,18 +459,18 @@ function ease2keys_OUT(_power){
                             
                         case PropertyValueType.TwoD_SPATIAL:
                             writeLn( "-->  PropertyValueType.TwoD_SPATIAL");      
-                            for( var i=0; i < prop.selectedKeys.length; i++){
+                            for( var k=0; k < prop.selectedKeys.length; k++){
                                     var easeIn = new KeyframeEase(0.0,1);
                                     var easeOut = new KeyframeEase(0.0, EASE_POWER);
 
-                                if(i == 0) { 
-                                    prop.setTemporalEaseAtKey(prop.selectedKeys[i],[easeIn] ,[easeIn]); 
+                                if(k == 0) { 
+                                    prop.setTemporalEaseAtKey(prop.selectedKeys[k],[easeIn] ,[easeIn]); 
                                     
-                                    prop.setSpatialContinuousAtKey(prop.selectedKeys[i],false);                            
+                                    prop.setSpatialContinuousAtKey(prop.selectedKeys[k],false);                            
                                 }
-                                if(i == 1) { 
-                                    prop.setTemporalEaseAtKey(prop.selectedKeys[i],[easeOut] ,[easeIn]);                            
-                                    prop.setSpatialContinuousAtKey(prop.selectedKeys[i],false);                            
+                                if(k == 1) { 
+                                    prop.setTemporalEaseAtKey(prop.selectedKeys[k],[easeOut] ,[easeIn]);                            
+                                    prop.setSpatialContinuousAtKey(prop.selectedKeys[k],false);                            
                                 }
 
                             }                            
@@ -474,19 +480,19 @@ function ease2keys_OUT(_power){
                         case PropertyValueType.ThreeD_SPATIAL:
                             writeLn("EASE IN -->  PropertyValueType.ThreeD_SPATIAL");   
                             writeLn(prop.selectedKeys.length);     
-                            for( var i=0; i < prop.selectedKeys.length; i++){
+                            for( var k=0; k < prop.selectedKeys.length; k++){
                                 var easeIn = new KeyframeEase(0.0,1);
                                 var easeOut = new KeyframeEase(0.0, EASE_POWER);
 
-                                if(i == 0) { 
-                                    prop.setTemporalEaseAtKey(prop.selectedKeys[i],[easeIn] ,[easeIn]); 
+                                if(k == 0) { 
+                                    prop.setTemporalEaseAtKey(prop.selectedKeys[k],[easeIn] ,[easeIn]); 
 
-                                    prop.setSpatialContinuousAtKey(prop.selectedKeys[i],false);                            
+                                    prop.setSpatialContinuousAtKey(prop.selectedKeys[k],false);                            
                                 }
-                                if(i == 1) { 
-                                    prop.setTemporalEaseAtKey(prop.selectedKeys[i],[easeOut] ,[easeIn]);
+                                if(k == 1) { 
+                                    prop.setTemporalEaseAtKey(prop.selectedKeys[k],[easeOut] ,[easeIn]);
 
-                                    prop.setSpatialContinuousAtKey(prop.selectedKeys[i],false);                            
+                                    prop.setSpatialContinuousAtKey(prop.selectedKeys[k],false);                            
                                 }
 
                             }
@@ -518,6 +524,7 @@ function ease2keys_OUT(_power){
 
     app.endUndoGroup();
 }
+
 function ease2keysBack(){
 
 
@@ -617,6 +624,68 @@ function ease2keysBack(){
     app.endUndoGroup();
 }
 
+function loadCsv(_file){
+
+    var file = new File(_file);
+    file.open('r');
+    var data = file.read();
+
+    file.close();
+    var lines = data.split("\n");
+
+    var prices = [];
+    for (var i = 0; i < lines.length; i++) {
+        if(i != 0){
+
+            var lineData  = lines[i].split(",");
+            prices.push(lineData[2]);
+        }
+    };
+
+    
+
+    var coords = [];
+    for (var i = 0; i < prices.length; i++) {
+
+        var NAN_Test = isNaN(parseFloat(prices[i]));
+        if( !NAN_Test) {
+            coords.push([i*10.0, parseFloat(prices[i]) ]);
+        }    
+            
+
+    };
+
+    // alert(coords);
+    //coords = [[0,10],[30,50]];
+        comp = app.project.activeItem;
+ 
+        if(comp != null){
+            
+            nullLayer = comp.layers.addNull()
+
+            shapeLayer_primary = comp.layers.addShape();
+            shapeLayer_primary.parent = nullLayer;
+            shapeLayer_primary.name = "shapeLayer"; 
+            var contents = shapeLayer_primary.property("Contents");
+
+            var group = contents.addProperty("ADBE Vector Shape - Group"); 
+
+
+                group.name = "tesdt";
+                var shapeGroup = group.property("ADBE Vector Shape");           
+                var shapePathData = new Shape();
+                shapePathData.closed = false;
+                shapePathData.vertices = coords;
+
+                shapeGroup.setValue(shapePathData);               
+        }else{
+
+            return;
+        }
+
+    
+}
+
 function createUI(thisObj) {
     var myPanel = thisObj;
     
@@ -627,7 +696,7 @@ function createUI(thisObj) {
     DDL.add("item","Easing");
     DDL.add("item","Misc");
 
-    DDL.selection = 0;
+    
     DDL.onChange = function(){
 
         if(this.selection.text == "Easing"){
@@ -700,11 +769,18 @@ function createUI(thisObj) {
     uiY  = 10.0;
     var miscGroup = myPanel.add("group",[10,30,2000,1000]);
     miscGroup.visible = false;
-    miscGroup.btn1 = miscGroup.add("button", [ 0,uiY,200,uiY+20],"Misc Button 1"); 
+    miscGroup.btn1 = miscGroup.add("button", [ 0,uiY,200,uiY+20],"Load CSV"); 
+    miscGroup.btn1.onClick = function(){
+
+        loadCsv("H:/WORK_PROJECTS/SPRAYFILMS/GIBOIRE/2D/AE/javascript_test/immobilier_TOULON_83000.csv");
+    }
     uiY  += 30.0;
-    miscGroup.btn2 = miscGroup.add("button", [ 0,uiY,200,uiY+20],"Misc Button 2");    
+   
 
 
+
+    //// set default value
+    DDL.selection = 1; // 1 --> misc
 /*
     uiY += 20.0;
     //  ANIMATE IN

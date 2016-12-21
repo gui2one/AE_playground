@@ -22,7 +22,7 @@ function offsetLayersTime(frames){
     for (var i=0; i < numSelected; i++ ){
             var layer = app.project.activeItem.selectedLayers[i];            
 
-//~             $.writeln(layer.startTime);
+
             layer.startTime = validTime(layer.startTime + inc);
             
             inc += frames / 25.0;
@@ -48,7 +48,7 @@ function alignLayers(){
         var layer = app.project.activeItem.selectedLayers[i];
         if(layer.name != "anonymous"){            
             layer.startTime = minTime;            
-            $.writeln(layer.time * 25.0);
+            //$.writeln(layer.time * 25.0);
         }
     }
         

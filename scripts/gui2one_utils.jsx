@@ -74,8 +74,7 @@ function string_of_enum(enumVal,value)
 
 function freezeTransforms(){
 
-
-        //writeLn(app.project.ActiveItem);
+        //writeLn(app.projec
         if(app.project.activeItem == undefined){
                 clearOutput();
                 writeLn("select a layer");
@@ -109,13 +108,12 @@ function freezeTransforms(){
                 $.writeln("----------------------------");
                 for(item in keyObject){
                        $.writeln( item.toString() + " : " + keyObject[item].toString());
-                        //string_of_enum(KeyframeInterpolationType,keyObject[item])
+                        
                 }
         }
     
         
 }
-
 
 function elastic(){
     
@@ -363,8 +361,8 @@ function copyStyle(){
 
     
 
-            myProps.push("'fontSize'");
-            myValues.push(textDocument.fontSize);
+            // myProps.push("'fontSize'");
+            // myValues.push(textDocument.fontSize);
 
             myProps.push("'fillColor'");
             myValues.push("["+textDocument.fillColor.toString()+"]");           
@@ -375,8 +373,8 @@ function copyStyle(){
             myProps.push("'strokeWidth'");
             myValues.push(textDocument.strokeWidth); 
 
-            myProps.push("'font'");
-            myValues.push("'"+textDocument.font+"'"); 
+            // myProps.push("'font'");
+            // myValues.push("'"+textDocument.font+"'"); 
 
             myProps.push("'strokeOverFill'");
             myValues.push(textDocument.strokeOverFill); 
@@ -399,11 +397,11 @@ function copyStyle(){
             // myProps.push("text");
             // myValues.push(textDocument.text);       
 
-            myProps.push("'justification'");
-            myValues.push(textDocument.justification);       
+            // myProps.push("'justification'");
+            // myValues.push(textDocument.justification);       
 
-            myProps.push("'tracking'");
-            myValues.push(textDocument.tracking);            
+            // myProps.push("'tracking'");
+            // myValues.push(textDocument.tracking);            
 
             // alert(myProps.length);
 
