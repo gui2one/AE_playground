@@ -1,4 +1,12 @@
 ﻿
+Object.size = function(obj) {
+    var size = 0, key;
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) size++;
+    }
+    return size;
+};   
+
 function string_of_enum(enumVal,value){
   for (var k in enumVal) if (enumVal[k] == value) return k;
   return null;
@@ -72,6 +80,7 @@ function distance(x1, x2, y1, y2){
 
     return (Math.sqrt( (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) ));
 }
+
 
 function ease2keys(_power){
 
@@ -225,6 +234,7 @@ function ease2keys(_power){
     app.endUndoGroup();
 }
 
+
 function ease2keys_IN(_power){
 
         EASE_POWER = _power;
@@ -374,6 +384,7 @@ function ease2keys_IN(_power){
 
     app.endUndoGroup();
 }
+
 
 function ease2keys_OUT(_power){
 
@@ -525,6 +536,7 @@ function ease2keys_OUT(_power){
     app.endUndoGroup();
 }
 
+
 function ease2keysBack(){
 
 
@@ -624,6 +636,7 @@ function ease2keysBack(){
     app.endUndoGroup();
 }
 
+
 function loadCsv(_file){
 
     var file = new File(_file);
@@ -685,6 +698,34 @@ function loadCsv(_file){
 
     
 }
+
+
+
+
+
+
+
+function loadHoudiniToAEFile(){
+   // alert("HtoAE !");
+ 
+    var myFile = File.openDialog("Selection prompt", "*.H2AE");
+    
+    
+    f = new File(myFile);
+    f.open('r');
+    var data = JSON.parse(f.read());
+    
+    $.writeln(Object.size(data.layers));
+    for(var layer in data.layers){
+            $.writeln(layer);
+            $.writeln(data.layers[layer].camInfos !== undefined);
+    }
+    // alert(data);
+}
+
+
+
+
 
 function createUI(thisObj) {
     var myPanel = thisObj;
@@ -769,10 +810,10 @@ function createUI(thisObj) {
     uiY  = 10.0;
     var miscGroup = myPanel.add("group",[10,30,2000,1000]);
     miscGroup.visible = false;
-    miscGroup.btn1 = miscGroup.add("button", [ 0,uiY,200,uiY+20],"Load CSV"); 
+    miscGroup.btn1 = miscGroup.add("button", [ 0,uiY,200,uiY+20],"Load HtoAE"); 
     miscGroup.btn1.onClick = function(){
-
-        loadCsv("H:/WORK_PROJECTS/SPRAYFILMS/GIBOIRE/2D/AE/javascript_test/immobilier_TOULON_83000.csv");
+        
+        loadHoudiniToAEFile();
     }
     uiY  += 30.0;
    
