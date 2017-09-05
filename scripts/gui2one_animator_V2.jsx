@@ -715,12 +715,106 @@ function loadHoudiniToAEFile(){
     f.open('r');
     var data = JSON.parse(f.read());
     
-    $.writeln(Object.size(data.layers));
-    for(var layer in data.layers){
-            $.writeln(layer);
-            $.writeln(data.layers[layer].camInfos !== undefined);
+    var myItemCollection = app.project.items;
+    var fps = data.compInfos.fps;
+    var fStart = data.compInfos.fStart;
+    var fEnd = data.compInfos.fEnd;
+    var duration = (fEnd - fStart) / fps;
+    
+    $.writeln("duraion :" + (duration*fps));
+    var myComp = myItemCollection.addComp(data.compInfos.name, data.compInfos.resx, data.compInfos.resy,1.0, duration + (1.0/fps), fps);
+    var sceneScaleNull = myComp.layers.addNull();
+    sceneScaleNull.threeDLayer = true;
+    sceneScaleNull.name = "Scene Scale";
+    sceneScaleNull.property("Position").setValue([0.0,0.0,0.0]);
+    sceneScaleNull.enabled = false;    
+
+    // $.writeln(Object.size(data.layers));
+        
+    for(var layerKey in data.layers){
+        //$.writeln(layer);
+        var layerData = data.layers[layerKey];
+        if(layerData.camInfos  !== undefined){
+            
+            var cam = myComp.layers.addCamera(layerKey,[0,0]);
+            cam.autoOrient = AutoOrientType.NO_AUTO_ORIENT;
+            cam.property("Zoom").setValue(layerData.camInfos.zoom[0]);
+            cam.parent = sceneScaleNull;         
+            
+            $.writeln(layerKey + " ---- " +layerData.positions.length + " position keys.");
+            
+            var numKeys = layerData.positions.length;
+            if( numKeys > 1 ){
+                var times = [];
+                var positions = [];
+                var rotationsX = [];
+                var rotationsY = [];
+                var rotationsZ = [];
+                
+                for(var i=0; i < numKeys; i++){
+                        times.push(i / fps);
+                        positions.push( [layerData.positions[i][0] , layerData.positions[i][1] , layerData.positions[i][2] ]);
+                        rotationsX.push( layerData.rotations[i][0] );                        
+                        rotationsY.push( layerData.rotations[i][1] );                        
+                        rotationsZ.push( layerData.rotations[i][2] );   
+                }
+            
+                $.writeln(positions[20]);
+                cam.property("Position").setValuesAtTimes( times, positions);
+                cam.property("X Rotation").setValuesAtTimes(times,rotationsX);
+                cam.property("Y Rotation").setValuesAtTimes(times,rotationsY);
+                cam.property("Z Rotation").setValuesAtTimes(times,rotationsZ);   
+            }
+        }else{
+
+                var nullLayer = myComp.layers.addNull();
+                nullLayer.threeDLayer = true;
+                nullLayer.name = layerKey;
+                nullLayer.parent = sceneScaleNull;
+            
+                var numKeys = layerData.positions.length;
+                if( numKeys > 1 )
+                {
+                    var times = [];
+                    var positions = [];
+                    var rotationsX = [];
+                    var rotationsY = [];
+                    var rotationsZ = [];
+                    
+                    for(var i=0; i < numKeys; i++)
+                    {
+                            times.push(i / fps);
+                            positions.push( [layerData.positions[i][0] , layerData.positions[i][1] , layerData.positions[i][2] ]);
+                            rotationsX.push( layerData.rotations[i][0] );                        
+                            rotationsY.push( layerData.rotations[i][1] );                        
+                            rotationsZ.push( layerData.rotations[i][2] );   
+                    }
+                
+                    $.writeln(positions[20]);
+                    nullLayer.property("Position").setValuesAtTimes( times, positions);
+                    nullLayer.property("X Rotation").setValuesAtTimes(times,rotationsX);
+                    nullLayer.property("Y Rotation").setValuesAtTimes(times,rotationsY);
+                    nullLayer.property("Z Rotation").setValuesAtTimes(times,rotationsZ);   
+                } else if(numKeys == 1){           
+                    nullLayer.property("Position").setValue(layerData.positions[0]);
+                    nullLayer.property("X Rotation").setValue(layerData.rotations[0][0]);
+                    nullLayer.property("Y Rotation").setValue(layerData.rotations[0][1]);
+                    nullLayer.property("Z Rotation").setValue(layerData.rotations[0][2]);           
+                    
+                }
+
+        }
     }
-    // alert(data);
+        
+    var worldScale = 10.0;
+    sceneScaleNull.property("Scale").setValue([100.0 * worldScale,100.0 * worldScale,100.0 * worldScale]);
+    
+    /*
+    var etape_10_MORTAGNE_SUR_SEVRE = myComp.layers.addNull();
+    etape_10_MORTAGNE_SUR_SEVRE.threeDLayer = true;
+    etape_10_MORTAGNE_SUR_SEVRE.name = "etape_10_MORTAGNE_SUR_SEVRE";
+    etape_10_MORTAGNE_SUR_SEVRE.parent = sceneScaleNull;
+    */
 }
 
 
