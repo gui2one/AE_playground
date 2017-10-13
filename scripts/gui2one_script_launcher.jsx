@@ -1,68 +1,67 @@
-﻿var SCRIPTS_FOLDER = new Folder("D:/CODE/AE_playground/launched_scripts/");
+﻿var defaultPath = "D:/CODE/AE_playground/launched_scripts";
+
+var SCRIPTS_FOLDER = new Folder("D:/CODE/AE_playground/launched_scripts");
 var FILE_PATHS = [];
 var DDL;
+var CURRENT_SCRIPT = "";
 var setScriptsFolder = function(){
 
-    var folder = Folder.selectDialog("select folder containing scripts" ,"D:/CODE/AE_playground/launched_scripts/");
-    var files;
+    var folder = Folder.selectDialog("select folder containing scripts" ,defaultPath);
+    if(folder){
     
-    SCRIPTS_FOLDER = folder;
-    $.writeln(SCRIPTS_FOLDER);
-    if(folder)
-    {
-        files = folder.getFiles();
-        if(files){
-            $.writeln(files);
-        }
+        defaultPath = folder;
+        var files;
+    
+        SCRIPTS_FOLDER = folder;
+        // $.writeln(SCRIPTS_FOLDER);
 
-
-        // f = new File(myFile);
-        // f.open('r');
-        // var data = f.read();
-        // f.close();        
+        loadFolderContent();
     }
+
 }
 
 var loadFolderContent = function(){
 
     var files = SCRIPTS_FOLDER.getFiles("*.jsx");
-    
-    FILE_PATHS = files;
-    //writeLn(FILE_PATHS);
+    if(files){
+        
+        FILE_PATHS = files;
 
-    // for (var i = 0; i < files.length; i++) {
-    //     var file = new File(files[i]);
-    //     $.writeln(file.name);
-    //     file.open("r")
-    //     var content = file.read();
-    //     file.close();
-
-    //     $.writeln(content);
-    //    // eval(content);
-
-    // }
-
+        feedDropDownList();
+    }
 }
 
-var feedDropDownList = function(){
-    
-    // for(var prop in DDL){
-    //     $.writeln(prop + " -->")
-    //     $.writeln(DDL[prop]);
-    // }
+var clearDropDownList = function(){
+    //$.writeln("items num :" +DDL.items.length);
+    DDL.selection = 0;
+    for (var i = DDL.items.length-1 ; i >= 0 ; i--) {    
+        DDL.remove(i)
+        
+     }
 
-    for (var i = 0; i < DDL.items.length; i++) {        
-        DDL.remove(0);
-    }
+    //DDL.rawValue = null;
+}
+var feedDropDownList = function(){    
+
+    clearDropDownList();
     for (var i = 0; i < FILE_PATHS.length; i++) {
         var file = new File(FILE_PATHS[i]);
-
-        DDL.add("item", file.name.replace(/%20/g, " "));
-        
+        DDL.add("item", file.name.replace(/%20/g, " "));        
     }
-    DDL.selection = 0;
+    DDL.selection = 0;    
+}
 
-    
+var loadScriptContent = function(index){
+
+        var file = new File(FILE_PATHS[parseFloat(index)]);
+        // $.writeln(file.name);
+        file.open("r")
+        var content = file.read();
+        file.close();
+        CURRENT_SCRIPT = content;
+
+        //$.writeln(content);    
+
 }
 
 function createUI(thisObj) {
@@ -71,27 +70,53 @@ function createUI(thisObj) {
     var uiX = 0;
     var uiY = 0;
 
-    var setPathBtn = myPanel.add("button",[uiX,uiY,uiX+200,uiY+20],"set scripts folder")
+    var setPathBtn = myPanel.add("button",[uiX,uiY,uiX+200,uiY+20],"Set Scripts Folder")
     uiY +=20;
-    var reloadBtn = myPanel.add("button", [uiX,uiY,uiX+200,uiY+20],"reload scripts folder");
+    var reloadBtn = myPanel.add("button", [uiX,uiY,uiX+200,uiY+20],"Reload Scripts Folder");
     uiY +=20;
-    DDL = myPanel.add("dropdownlist",[uiX,uiY,uiX+200,uiY+20],"drop down list");
-    
+    DDL = myPanel.add("dropdownlist",[uiX,uiY,uiX+200,uiY+20],"drop down list");    
+    uiY +=20;
+
+    var executeBtn = myPanel.add("button",[uiX,uiY,uiX+200,uiY+20],"Execute")
+    uiY +=20;
+
+    var clearBtn = myPanel.add("button",[uiX,uiY,uiX+200,uiY+20],"Clear")
     uiY +=20;
 
     setPathBtn.onClick = function(){
 
-        $.writeln("hello");
+        // $.writeln("hello");
         setScriptsFolder();
     }
 
     reloadBtn.onClick = function(){
         loadFolderContent();
-        feedDropDownList();
+        
     }
     
+
+    DDL.onChange = function(){
+        // $.writeln(FILE_PATHS[this.selection.index]);
+        if(this.selection){
+
+            loadScriptContent(this.selection.index);
+            // $.writeln("------------------------------------");
+            // $.writeln("THIS --> " +this.toString());
+            // $.writeln(this.selection);
+            // $.writeln("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+        }
+    }
+    executeBtn.onClick = function(){
+        eval(CURRENT_SCRIPT);
+    }
+
+    clearBtn.onClick = function(){
+        clearDropDownList();
+    }
+
     loadFolderContent();
-    feedDropDownList();
+    
 }
 
 var panel = createUI(this);
