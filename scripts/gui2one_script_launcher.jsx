@@ -1,6 +1,9 @@
 ﻿var defaultPath = "D:/CODE/AE_playground/launched_scripts";
 
-var SCRIPTS_FOLDER = new Folder("D:/CODE/AE_playground/launched_scripts");
+alert((new File($.fileName)).parent);
+var txtFile = new File()
+
+var SCRIPTS_FOLDER;
 var FILE_PATHS = [];
 var DDL;
 var CURRENT_SCRIPT = "";
